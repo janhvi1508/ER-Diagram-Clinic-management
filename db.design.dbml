@@ -1,0 +1,108 @@
+
+Specialty [icon: star, color: purple] {
+  specialty_id serial [pk]
+  name string ("Name of the Specialty")
+  description text
+}
+
+Doctor [icon: user-plus, color: red] {
+  doctor_id int [pk]
+  specialty_id int [fk]
+  first_name string
+  last_name string
+  phone string
+  email string
+  joining_date datetime
+}
+
+Patient [icon: user, color: blue] {
+  patient_id int [pk]
+  first_name string
+  last_name string
+  dob date
+  gender string
+  phone string
+  email string
+  address text
+  created_at datetime
+}
+
+Appointment [icon: calendar, color: yellow] {
+  appointment_id int [pk]
+  patient_id int [fk]
+  doctor_id int [fk]
+  appointment_date date
+  start_time time
+  status string
+  created_at datetime
+}
+
+Consultation [icon: activity, color: green] {
+  consultation_id int [pk]
+  appointment_id int [fk] 
+  notes text
+  diagnosis text
+  prescription text
+  consultation_fee decimal(10,2)
+  created_at datetime
+}
+
+Test_Catalog [icon: list, color: indigo] {
+  test_id int [pk]
+  test_name string
+  description text
+  cost decimal(10,2)
+}
+
+Prescribed_Test [icon: file-plus, color: orange] {
+  prescribed_test_id int [pk]
+  consultation_id int [fk]
+  test_id int [fk]
+  status string
+  prescribed_date datetime
+}
+
+Test_Report [icon: file-text, color: teal] {
+  report_id int [pk]
+  prescribed_test_id int [fk]
+  result_summary text
+  detailed_report_url string
+  generated_date datetime
+}
+
+Invoice [icon: file, color: pink] {
+  invoice_id int [pk]
+  patient_id int [fk]
+  consultation_id int [fk]
+  total_amount decimal
+  status string
+  issued_at datetime
+}
+
+Payment [icon: credit-card, color: green] {
+  payment_id int [pk]
+  invoice_id int [fk]
+  amount_paid decimal(10,2)
+  payment_method string 
+  payment_date datetime
+}
+
+Specialty.specialty_id < Doctor.specialty_id
+
+Patient.patient_id < Appointment.patient_id
+
+Doctor.doctor_id < Appointment.doctor_id
+
+Appointment.appointment_id - Consultation.appointment_id
+
+Consultation.consultation_id < Prescribed_Test.consultation_id
+
+Test_Catalog.test_id < Prescribed_Test.test_id
+
+Prescribed_Test.prescribed_test_id - Test_Report.prescribed_test_id
+
+Patient.patient_id < Invoice.patient_id
+
+Consultation.consultation_id - Invoice.consultation_id
+
+Invoice.invoice_id < Payment.invoice_id
